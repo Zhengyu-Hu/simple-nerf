@@ -1,6 +1,5 @@
-# simple-nerf
+# simple-nerf NeRF保姆级教程
 A simplified implementation of  NeRF for  beginner.
-NeRF保姆级教程
 
 # 概述
 本人将分享自己在学习NeRF过程中的经验。主要分为基础理论和代码实现。我将提供我认为非常棒的学习资料，其中每一个资料我都认真学习，确认其内容正确易懂。
