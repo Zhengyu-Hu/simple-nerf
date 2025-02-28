@@ -153,7 +153,7 @@ for i in trange(global_step, num_iters):
     # update the weights. See Equation (6) in Section 5.3.
     loss = criterion(C_rs_c, target_img_batch) + criterion(C_rs_f, target_img_batch)
     if i % loss_every == 0 and i > 0:
-        print(f"Iteration{i} --> Loss: {loss.item()}")
+        print(f"\nIteration{i} --> Loss: {loss.item()}")
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
