@@ -3,7 +3,7 @@ import imageio.v2 as imageio
 import numpy as np
 import matplotlib.pyplot as plt
 def get_data(splits = ['train','val','test']):
-    basedir = os.path.join('data','lego')
+    basedir = os.path.join('data/nerf_synthetic','lego')
     metas = {}
     for s in splits:
         with open(os.path.join(basedir,f'transforms_{s}.json'),'r') as fp:
