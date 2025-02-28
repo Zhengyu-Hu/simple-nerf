@@ -3,7 +3,6 @@ import numpy as np
 import torch
 from torch import nn, optim
 import os
-from tqdm import trange
 from helper import *
 
 # Set seed.
@@ -113,7 +112,7 @@ if LOAD_ckpts:
 F_c.train()
 F_f.train()
 
-for i in trange(global_step, num_iters):
+for i in range(global_step, num_iters):
     # 从训练集中随机选一个位姿
     target_img_idx = np.random.randint(images.shape[0])
     target_pose = poses[target_img_idx].to(device)
@@ -153,7 +152,7 @@ for i in trange(global_step, num_iters):
     # update the weights. See Equation (6) in Section 5.3.
     loss = criterion(C_rs_c, target_img_batch) + criterion(C_rs_f, target_img_batch)
     if i % loss_every == 0 and i > 0:
-        print(f"\nIteration{i} --> Loss: {loss.item()}")
+        print(f"Iteration{i} --> Loss: {loss.item()}")
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
