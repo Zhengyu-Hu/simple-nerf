@@ -152,6 +152,8 @@ for i in trange(global_step, num_iters):
     # Calculate the mean squared error for both the coarse and fine MLP models and
     # update the weights. See Equation (6) in Section 5.3.
     loss = criterion(C_rs_c, target_img_batch) + criterion(C_rs_f, target_img_batch)
+    if i % loss_every == 0 and i > 0:
+        print(f"Iteration{i} --> Loss: {loss.item()}")
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
@@ -160,10 +162,6 @@ for i in trange(global_step, num_iters):
     # https://keras.io/api/optimizers/learning_rate_schedules/exponential_decay/.
     for g in optimizer.param_groups:
         g["lr"] = lr * decay_rate ** (i / decay_steps)
-
-    if i % loss_every == 0 and i > 0:
-        loss = criterion(C_rs_f, test_img)
-        print(f"Iteration{i} --> Loss: {loss.item()}")
 
     if i % display_every == 0 and i > 0:
         F_c.eval()
