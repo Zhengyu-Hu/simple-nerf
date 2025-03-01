@@ -4,7 +4,7 @@ import torch
 from torch import nn, optim
 import os
 from helper import *
-
+from tqdm import trange
 # load model
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 F_c = NeRF().to(device)
@@ -79,6 +79,6 @@ def run_one_inference(img, pose, idx):
     plt.close()
 
 N = images.shape[0]
-for idx in range(N):
+for idx in trange(N):
     idx = 0
     run_one_inference(images[idx], poses[idx], idx)
