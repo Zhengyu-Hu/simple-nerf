@@ -2,7 +2,7 @@
 *.npz
 test*
 data
-model
+# model
 logs
 # Byte-compiled / optimized / DLL files
 __pycache__/
