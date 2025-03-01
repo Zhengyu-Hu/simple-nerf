@@ -28,7 +28,7 @@ if LOAD_ckpts:
     # print('Train from scratch')
 
 # load data
-data_f = "lego_train_val.npz"
+data_f = "lego_test.npz"
 data = np.load(data_f)
 images = torch.tensor(data["images"].astype(np.float32))
 if data_f == "car.npz":
