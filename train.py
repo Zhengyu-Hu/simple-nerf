@@ -80,7 +80,6 @@ global_step = 0
 num_iters = 100000
 display_every = 1000
 weight_every = 1000
-loss_every = 100
 
 logs_path = './logs'
 if os.path.exists(logs_path) == False:
@@ -151,8 +150,6 @@ for i in range(global_step, num_iters):
     # Calculate the mean squared error for both the coarse and fine MLP models and
     # update the weights. See Equation (6) in Section 5.3.
     loss = criterion(C_rs_c, target_img_batch) + criterion(C_rs_f, target_img_batch)
-    if i % loss_every == 0 and i > 0:
-        print(f"Iteration{i} --> Loss: {loss.item()}")
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
@@ -179,8 +176,10 @@ for i in range(global_step, num_iters):
             )
 
         loss = criterion(C_rs_f, test_img)
+        print(f"==>> loss: \n{loss}")
         psnr = -10.0 * torch.log10(loss)
-
+        print(f"==>> psnr: \n{psnr}")
+        
         psnrs.append(psnr.item())
         iternums.append(i)
 
