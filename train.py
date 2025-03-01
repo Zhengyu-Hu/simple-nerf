@@ -176,9 +176,8 @@ for i in range(global_step, num_iters):
             )
 
         loss = criterion(C_rs_f, test_img)
-        print(f"==>> loss: \n{loss}")
         psnr = -10.0 * torch.log10(loss)
-        print(f"==>> psnr: \n{psnr}")
+        print(f"iteration {i} ==>> loss: \n{loss}, psnr: \n{psnr}")
         
         psnrs.append(psnr.item())
         iternums.append(i)
