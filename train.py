@@ -190,6 +190,7 @@ for i in range(global_step, num_iters):
         plt.plot(iternums, psnrs)
         plt.title("PSNR")
         target_fig.savefig(logs_path + f'/Iteration{i}.png')
+        plt.close()
 
         F_c.train()
         F_f.train()
