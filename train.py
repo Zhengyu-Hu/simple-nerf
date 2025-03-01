@@ -77,7 +77,7 @@ psnrs = []
 iternums = []
 # See Section 5.3.
 global_step = 0
-num_iters = 100000
+num_iters = 200000
 display_every = 1000
 weight_every = 1000
 
