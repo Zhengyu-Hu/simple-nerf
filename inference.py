@@ -5,6 +5,8 @@ from torch import nn, optim
 import os
 from helper import *
 from tqdm import trange
+from load_data import *
+
 # load model
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 F_c = NeRF().to(device)
@@ -28,13 +30,14 @@ if LOAD_ckpts:
     # print('Train from scratch')
 
 # load data
-data_f = "lego_test.npz"
-data = np.load(data_f)
-images = torch.tensor(data["images"].astype(np.float32))
-if data_f == "car.npz":
-  images = images/255
-poses = torch.tensor(data["poses"].astype(np.float32))
-focal = float(data['focal'])
+# 导入数据
+splits = ['train','val']
+imgs, poses, K = get_data(splits)
+images = imgs[...,:3]*imgs[...,-1:] + (1.-imgs[...,-1:])
+focal = K[0,0]
+images = torch.tensor(images.astype(np.float32))
+poses = torch.tensor(poses.astype(np.float32))
+# img_size = images.shape[1]
 H, W = images.shape[1:3]
 
 # rendering args

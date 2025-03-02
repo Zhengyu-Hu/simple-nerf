@@ -4,7 +4,16 @@ import torch
 from torch import nn, optim
 import os
 from helper import *
+from load_data import *
+from tqdm import trange
 
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('-n', type=int, default=200000)
+parser.add_argument('-d', type=int, default=1000)
+parser.add_argument('-w', type=int, default=1000)
+parser.add_argument('-l', type=bool, default=True)
+args = parser.parse_args()
 # Set seed.
 seed = 42
 torch.manual_seed(seed)
@@ -43,15 +52,12 @@ t_i_c_gap = (t_f - t_n) / N_c
 t_i_c_bin_edges = (t_n + torch.arange(N_c) * t_i_c_gap).to(device)
 
 # 导入数据
-data_f = "lego_train_val.npz"
-data = np.load(data_f)
-
-# 展示图像
-images = torch.tensor(data["images"].astype(np.float32))
-if data_f == "car.npz":
-  images = images/255
-poses = torch.tensor(data["poses"].astype(np.float32))
-focal = float(data['focal'])
+splits = ['train','val']
+imgs, poses, K = get_data(splits)
+images = imgs[...,:3]*imgs[...,-1:] + (1.-imgs[...,-1:])
+focal = K[0,0]
+images = torch.tensor(images.astype(np.float32))
+poses = torch.tensor(poses.astype(np.float32))
 # img_size = images.shape[1]
 H, W = images.shape[1:3]
 
@@ -77,9 +83,9 @@ psnrs = []
 iternums = []
 # See Section 5.3.
 global_step = 0
-num_iters = 200000
-display_every = 1000
-weight_every = 1000
+num_iters = args.n
+display_every = args.d
+weight_every = args.w
 
 logs_path = './logs'
 if os.path.exists(logs_path) == False:
@@ -91,7 +97,7 @@ if os.path.exists(model_path) == False:
 test_fig.savefig(logs_path + '/testfig.png')
 
 # 检查点读取
-LOAD_ckpts = True
+LOAD_ckpts = args.l
 if LOAD_ckpts:
   ckpts = [os.path.join(model_path,f) for f in sorted(os.listdir(model_path)) if 'tar' in f]
   # 升序排列，选择最后一轮开始训练
@@ -111,7 +117,7 @@ if LOAD_ckpts:
 F_c.train()
 F_f.train()
 
-for i in range(global_step, num_iters):
+for i in trange(global_step, num_iters):
     # 从训练集中随机选一个位姿
     target_img_idx = np.random.randint(images.shape[0])
     target_pose = poses[target_img_idx].to(device)
@@ -121,7 +127,8 @@ for i in range(global_step, num_iters):
     # 换言之，从所有的像素中抽出n_batch_pix个像素
     pix_idxs = pixel_ps.multinomial(n_batch_pix, False)
     # 将展平后的一维索引转换成原图片的二维索引
-    pix_idx_rows = pix_idxs // W
+    # pix_idx_rows = pix_idxs // W
+    pix_idx_rows = torch.div(pix_idxs, W, rounding_mode='floor')
     pix_idx_cols = pix_idxs % W
 
     # 1024像素太多了，采样64

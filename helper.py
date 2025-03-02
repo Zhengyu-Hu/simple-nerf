@@ -9,7 +9,7 @@ def get_rays(H, W, focal, c2w):
   前3行3列表示旋转
   t表示平移
   '''
-  i, j = torch.meshgrid(torch.linspace(0, W-1, W), torch.linspace(0, H-1, H))  # pytorch's meshgrid has indexing='ij'
+  i, j = torch.meshgrid(torch.linspace(0, W-1, W), torch.linspace(0, H-1, H), indexing='ij')  # pytorch's meshgrid has indexing='ij'
   i = i.t()
   j = j.t()
   # 除以焦距归一化 参见https://www.youtube.com/watch?v=ujkec9KBnI8
