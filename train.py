@@ -117,7 +117,7 @@ if LOAD_ckpts:
 F_c.train()
 F_f.train()
 
-for i in range(global_step, num_iters):
+for i in range(global_step, num_iters+1):
     # 从训练集中随机选一个位姿
     target_img_idx = np.random.randint(images.shape[0])
     target_pose = poses[target_img_idx].to(device)
@@ -166,7 +166,7 @@ for i in range(global_step, num_iters):
     for g in optimizer.param_groups:
         g["lr"] = lr * decay_rate ** (i / decay_steps)
 
-    if (i % display_every == 0 and i > 0) or i+1 == num_iters :
+    if i % display_every == 0 and i > 0 :
         F_c.eval()
         F_f.eval()
         with torch.no_grad():
@@ -203,7 +203,7 @@ for i in range(global_step, num_iters):
         F_f.train()
 
     # 存储模型，check points 检查点
-    if (i % weight_every == 0 and i > 0) or i+1 == num_iters :
+    if i % weight_every == 0 and i > 0 :
       path = os.path.join(model_path, '{:06d}.tar'.format(i))
       torch.save(
             {
