@@ -31,9 +31,9 @@ decay_rate = 0.1
 
 # Initialize volume rendering hyperparameters.
 # Near bound. See Section 4.
-t_n = 1.0
+t_n = 2.0
 # Far bound. See Section 4.
-t_f = 4.0
+t_f = 6.0
 # Number of coarse samples along a ray. See Section 5.3.
 N_c = 64
 # Number of fine samples along a ray. See Section 5.3.
@@ -116,7 +116,6 @@ for i in range(global_step, num_iters):
     target_img_idx = np.random.randint(images.shape[0])
     target_pose = poses[target_img_idx].to(device)
     rays_o, rays_d = get_rays(H, W, focal, target_pose)
-
     # Sample a batch of rays.
     # 不放回的抽样，从pixel_ps的分布中抽出n_batch_pix个样本
     # 换言之，从所有的像素中抽出n_batch_pix个像素
@@ -125,6 +124,7 @@ for i in range(global_step, num_iters):
     pix_idx_rows = pix_idxs // W
     pix_idx_cols = pix_idxs % W
 
+    # 1024像素太多了，采样64
     # n_batch_pix = batch_img_size ** 2
     ds_batch = rays_d[pix_idx_rows, pix_idx_cols].reshape(
         batch_img_size, batch_img_size, -1
