@@ -117,7 +117,7 @@ if LOAD_ckpts:
 F_c.train()
 F_f.train()
 
-for i in trange(global_step, num_iters):
+for i in range(global_step, num_iters):
     # 从训练集中随机选一个位姿
     target_img_idx = np.random.randint(images.shape[0])
     target_pose = poses[target_img_idx].to(device)
