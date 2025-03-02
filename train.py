@@ -166,7 +166,7 @@ for i in trange(global_step, num_iters):
     for g in optimizer.param_groups:
         g["lr"] = lr * decay_rate ** (i / decay_steps)
 
-    if i % display_every == 0 and i > 0:
+    if (i+1) % display_every == 0 :
         F_c.eval()
         F_f.eval()
         with torch.no_grad():
@@ -203,7 +203,7 @@ for i in trange(global_step, num_iters):
         F_f.train()
 
     # 存储模型，check points 检查点
-    if i % weight_every == 0 and i > 0:
+    if (i+1) % weight_every == 0 :
       path = os.path.join(model_path, '{:06d}.tar'.format(i))
       torch.save(
             {
