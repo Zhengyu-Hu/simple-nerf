@@ -31,7 +31,7 @@ if LOAD_ckpts:
 
 # load data
 # 导入数据
-splits = ['train','val']
+splits = ['test']
 imgs, poses, K = get_data(splits)
 images = imgs[...,:3]*imgs[...,-1:] + (1.-imgs[...,-1:])
 focal = K[0,0]
@@ -83,5 +83,5 @@ def run_one_inference(img, pose, idx):
 
 N = images.shape[0]
 for idx in trange(N):
-    idx = 0
+    # idx = 0
     run_one_inference(images[idx], poses[idx], idx)
