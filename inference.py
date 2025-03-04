@@ -21,7 +21,7 @@ if LOAD_ckpts:
   # 升序排列，选择最后一轮开始训练
   if len(ckpts)>0:
     print('Found ckpts',f'-->{ckpts}')
-    checkpoint = torch.load(ckpts[-1])
+    checkpoint = torch.load(ckpts[-1], weights_only=False)
     step = checkpoint['global_step']
     F_c.load_state_dict(checkpoint['model_coarse_state_dict'])
     F_f.load_state_dict(checkpoint['model_fine_state_dict'])
@@ -42,9 +42,9 @@ H, W = images.shape[1:3]
 
 # rendering args
 # Near bound. See Section 4.
-t_n = 1.0
+t_n = 2.0
 # Far bound. See Section 4.
-t_f = 4.0
+t_f = 6.0
 # Number of coarse samples along a ray. See Section 5.3.
 N_c = 64
 # Number of fine samples along a ray. See Section 5.3.
