@@ -1,7 +1,7 @@
 # data
 *.npz
 # model
-logs
+logs/*
 data
 inference
 # Byte-compiled / optimized / DLL files
