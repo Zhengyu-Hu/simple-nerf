@@ -131,10 +131,6 @@ def run_one_iter_of_nerf(
 
   return C_c, C_f
 
-def run_one_iter_of_tiny_nerf(rays_o, rays_d, t_edges, t_gap, N_c, chunk_size, F_c):
-    r_c, t_c = get_coarse_query_pts(rays_o, rays_d, N_c, t_edges, t_gap)
-    C_rs_c, _ = render(r_c, t_c, rays_d, chunk_size, F_c)
-    return C_rs_c
 
 class NeRF(nn.Module):
   def __init__(self) -> None:
