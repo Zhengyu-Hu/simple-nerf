@@ -2,6 +2,8 @@ import os,json
 import imageio.v2 as imageio
 import numpy as np
 import matplotlib.pyplot as plt
+from PIL import Image
+
 def get_data(splits = ['train','val','test']):
     basedir = os.path.join('data/nerf_synthetic','lego')
     metas = {}
@@ -50,6 +52,18 @@ def get_data(splits = ['train','val','test']):
     
     
     return imgs,poses,intrinsic_matrix
+
+
+def load_images_from_folder(folder):
+    images = []
+    for filename in os.listdir(folder):
+        try:
+            img_path = os.path.join(folder, filename)
+            img = Image.open(img_path)
+            images.append(np.array(img))
+        except:
+            continue  # 跳过非图像文件或损坏的图像
+    return np.array(images)
 
 def get_rays_np(H, W, K, c2w):
     '''
