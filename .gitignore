@@ -2,7 +2,7 @@
 *.npz
 # model
 logs/*
-data
+data/*
 inference
 # Byte-compiled / optimized / DLL files
 __pycache__/
